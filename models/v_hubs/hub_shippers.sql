@@ -2,9 +2,9 @@
     config(materialized='incremental')
 }}
 
-{%- set source_model = "v_stg_orders" -%}
-{%- set src_pk = "ORDER_HK" -%}
-{%- set src_nk = "order_pk" -%}
+{%- set source_model = "v_stg_shippers" -%}
+{%- set src_pk = "SHIPPER_HK" -%}
+{%- set src_nk = "shipper_pk" -%}
 {%- set src_ldts = "LOAD_DATE" -%}
 {%- set src_source = "RECORD_SOURCE" -%}
 
