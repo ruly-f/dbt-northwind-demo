@@ -14,3 +14,4 @@ with
 
 select *
 from renamed
+-- add
