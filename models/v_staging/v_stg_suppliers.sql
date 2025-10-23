@@ -1,24 +1,17 @@
 {% set yaml_metadata %}
-source_model: stg_erp__orders
+source_model: stg_erp__suppliers
 derived_columns:
-    RECORD_SOURCE: "!ERP-ORDERS"
-    LOAD_DATE: dateadd(DAY, 15, order_date)
-    EFFECTIVE_FROM: order_date
+    RECORD_SOURCE: "!ERP-SUPPLIERS"
+    LOAD_DATE: dateadd(DAY, -15, current_timestamp())
+    EFFECTIVE_FROM: current_timestamp()
 hashed_columns:
-    ORDER_HK: order_pk
-    CUSTOMER_HK: customer_fk
-    EMPLOYEE_HK: employee_fk
-    SHIPPER_HK: shipper_fk
-    CUSTOMER_ORDER_HK:
-      - customer_fk
-      - order_pk
-    ORDER_HASHDIFF:
+    SUPPLIER_HK: supplier_pk
+    SUPPLIER_HASHDIFF:
       is_hashdiff: true
       columns:
-       - recipient_name
-       - recipient_city
-       - recipient_region
-       - recipient_country
+       - supplier_name
+       - supplier_city
+       - supplier_country
 {% endset %}
 
 {% set metadata_dict = fromyaml(yaml_metadata) %}
