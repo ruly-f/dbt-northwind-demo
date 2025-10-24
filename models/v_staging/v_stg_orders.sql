@@ -9,9 +9,15 @@ hashed_columns:
     CUSTOMER_HK: customer_fk
     EMPLOYEE_HK: employee_fk
     SHIPPER_HK: shipper_fk
-    CUSTOMER_ORDER_HK:
-      - customer_fk
+    ORDER_CUSTOMER_HK:
       - order_pk
+      - customer_fk
+    ORDER_EMPLOYEE_HK:
+      - order_pk
+      - employee_fk
+    ORDER_SHIPPER_HK:
+      - order_pk
+      - shipper_fk
     ORDER_HASHDIFF:
       is_hashdiff: true
       columns:

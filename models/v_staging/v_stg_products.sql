@@ -8,12 +8,12 @@ hashed_columns:
     PRODUCT_HK: product_pk
     CATEGORY_HK: category_fk
     SUPPLIER_HK: supplier_fk
-    CATEGORY_PRODUCT_HK:
+    PRODUCT_CATEGORY_HK:
+      - product_pk
       - category_fk
+    PRODUCT_SUPPLIER_HK:
       - product_pk
-    SUPPLIER_PRODUCT_HK:
       - supplier_fk
-      - product_pk
     PRODUCT_HASHDIFF:
       is_hashdiff: true
       columns:
