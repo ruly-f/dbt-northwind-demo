@@ -13,9 +13,6 @@ src_payload:
   - employee_title
   - employee_birth_date
   - employee_hire_date
-  - employee_city
-  - employee_region
-  - employee_country
 src_eff: "EFFECTIVE_FROM"
 src_ldts: "LOAD_DATE"
 src_source: "RECORD_SOURCE"
