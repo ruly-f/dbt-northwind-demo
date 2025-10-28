@@ -9,6 +9,11 @@ src_hashdiff:
   source_column: "ORDER_HASHDIFF"
   alias: "HASHDIFF"
 src_payload:
+  - order_number
+  - order_date
+  - ship_date
+  - required_delivery_date
+  - freight
   - recipient_name
   - recipient_city
   - recipient_region

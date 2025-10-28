@@ -5,7 +5,7 @@ models:
       professional details such as name, title, hire date, and location. This dimension may also
       include a self-join to provide the name of each employee's direct manager.
     columns:
-      - name: employee_pk
+      - name: employee_hk
         description: Unique identifier for each employee.
         tests:
           - unique

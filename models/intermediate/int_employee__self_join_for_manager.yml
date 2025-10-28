@@ -4,7 +4,7 @@ models:
       Intermediate model that joins employees to their managers using a self join,
       enriching employee records with manager names.
     columns:
-      - name: employee_pk
+      - name: employee_hk
         description: Unique identifier for each employee.
         tests:
           - unique

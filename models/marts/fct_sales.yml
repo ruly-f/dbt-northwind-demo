@@ -2,20 +2,20 @@ models:
   - name: fct_sales
     description: Fact model with sales data and metrics.
     columns:
-      - name: order_item_sk
-        description: Primary key of fct_sales model.
+      - name: order_item_hk
+        description: Hash key of fct_sales model.
 
-      - name: product_fk
-        description: Foreign key referencing the product.
+      - name: product_hk
+        description: Hash key referencing the product.
 
-      - name: employee_fk
-        description: Foreign key referencing the employee responsible for the order.
+      - name: employee_hk
+        description: Hash key referencing the employee responsible for the order.
 
-      - name: customer_fk
-        description: Foreign key referencing the customer who placed the order.
+      - name: customer_hk
+        description: Hash key referencing the customer who placed the order.
 
-      - name: shipper_fk
-        description: Foreign key referencing the shipper used for delivery.
+      - name: shipper_hk
+        description: Hash key referencing the shipper used for delivery.
 
       - name: order_date
         description: Date when the order was placed.

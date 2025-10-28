@@ -2,7 +2,7 @@ models:
   - name: int_products__enriched
     description: Model that enriches product data with category and supplier information.
     columns:
-      - name: product_pk
+      - name: product_hk
         description: Unique identifier for each product.
         tests:
           - unique

@@ -1,5 +1,5 @@
 {% set yaml_metadata %}
-source_model: stg_erp__products
+source_model: raw_products
 derived_columns:
     RECORD_SOURCE: "!ERP-PRODUCTS"
     LOAD_DATE: dateadd(DAY, 15, current_timestamp())
@@ -18,6 +18,7 @@ hashed_columns:
       is_hashdiff: true
       columns:
        - product_pk
+       - product_name
        - quantity_per_unit
        - unit_price
        - units_in_stock

@@ -2,22 +2,22 @@ models:
   - name: int_order_items__metrics
     description: Intermediate model that joins order items with orders to calculate financial metrics and enrich with delivery details.
     columns:
-      - name: order_item_sk
+      - name: order_item_hk
         description: Unique identifier for each item in an order.
         tests:
           - unique
           - not_null
 
-      - name: product_fk
+      - name: product_hk
         description: Foreign key referencing the product.
 
-      - name: employee_fk
+      - name: employee_hk
         description: Foreign key referencing the employee responsible for the order.
 
-      - name: customer_fk
+      - name: customer_hk
         description: Foreign key referencing the customer who placed the order.
 
-      - name: shipper_fk
+      - name: shipper_hk
         description: Foreign key referencing the shipper used for delivery.
 
       - name: order_date

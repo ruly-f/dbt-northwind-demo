@@ -4,9 +4,15 @@ models:
       Dimension table that contains customer information including company name and location details.
       This table is used to support analyses related to customer behavior, regional sales, and order distribution.
     columns:
+      - name: customer_hk
+        description: hash key for each customer
+        data_tests:
+          - unique
+          - not_null
+
       - name: customer_pk
         description: Unique identifier for each customer.
-        tests:
+        data_tests:
           - unique
           - not_null
 

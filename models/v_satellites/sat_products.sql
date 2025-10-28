@@ -9,6 +9,7 @@ src_hashdiff:
   source_column: "PRODUCT_HASHDIFF"
   alias: "HASHDIFF"
 src_payload:
+  - product_name
   - quantity_per_unit
   - unit_price
   - units_in_stock

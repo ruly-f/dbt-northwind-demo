@@ -1,5 +1,5 @@
 {% set yaml_metadata %}
-source_model: stg_erp__shippers
+source_model: raw_shippers
 derived_columns:
     RECORD_SOURCE: "!ERP-SHIPPERS"
     LOAD_DATE: dateadd(DAY, -15, current_timestamp())

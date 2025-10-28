@@ -1,37 +1,59 @@
 with
-    -- call required staging models
-    categories as (
+    hub_products as (
         select *
-        from {{ ref('stg_erp__categories') }}
+        from {{ ref('hub_products') }}
     )
 
-    , suppliers as (
+    , sat_products as (
         select *
-        from {{ ref('stg_erp__suppliers') }}
+        from {{ ref('sat_products') }}
     )
 
-    , products as (
+    , link_products_categories as (
         select *
-        from {{ ref('stg_erp__products') }}
+        from {{ ref('link_products_categories') }}
     )
 
+    , link_products_suppliers as (
+        select *
+        from {{ ref('link_products_suppliers') }}
+    )
+
+    , sat_categories as (
+        select *
+        from {{ ref('sat_categories_details') }}
+    )
+
+    , sat_suppliers as (
+        select *
+        from {{ ref('sat_suppliers_details') }}
+    )
+    
     , enrich_products as (
         select
-            products.product_pk
-            , products.product_name
-            , products.quantity_per_unit
-            , products.unit_price
-            , products.units_in_stock
-            , products.units_on_order
-            , products.reorder_level
-            , products.is_discontinued
-            , categories.category_name
-            , suppliers.supplier_name
-            , suppliers.supplier_city
-            , suppliers.supplier_country 
-        from products
-        left join categories on products.category_fk = categories.category_pk
-        left join suppliers on products.supplier_fk = suppliers.supplier_pk
+            hub_products.product_hk
+            , sat_products.product_name
+            , sat_products.quantity_per_unit
+            , sat_products.unit_price
+            , sat_products.units_in_stock
+            , sat_products.units_on_order
+            , sat_products.reorder_level
+            , sat_products.is_discontinued
+            , sat_categories.category_name
+            , sat_suppliers.supplier_name
+            , sat_suppliers.supplier_city
+            , sat_suppliers.supplier_country 
+        from hub_products
+        left join sat_products
+            on hub_products.product_hk = sat_products.product_hk
+        left join link_products_categories
+            on hub_products.product_hk = link_products_categories.product_hk
+        left join sat_categories
+            on link_products_categories.category_hk = sat_categories.category_hk
+        left join link_products_suppliers
+            on hub_products.product_hk = link_products_suppliers.product_hk
+        left join sat_suppliers
+            on link_products_suppliers.supplier_hk = sat_suppliers.supplier_hk
     )
 
 select *

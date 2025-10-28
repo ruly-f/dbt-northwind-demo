@@ -1,5 +1,5 @@
 {% set yaml_metadata %}
-source_model: stg_erp__orders
+source_model: raw_orders
 derived_columns:
     RECORD_SOURCE: "!ERP-ORDERS"
     LOAD_DATE: dateadd(DAY, 15, order_date)

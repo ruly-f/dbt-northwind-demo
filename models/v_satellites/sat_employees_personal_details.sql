@@ -9,6 +9,7 @@ src_hashdiff:
   source_column: "EMPLOYEE_HASHDIFF"
   alias: "HASHDIFF"
 src_payload:
+  - manager_hk
   - employee_name
   - employee_title
   - employee_birth_date
