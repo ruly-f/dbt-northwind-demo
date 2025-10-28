@@ -13,6 +13,8 @@ hashed_columns:
     ORDER_ITEM_HASHDIFF:
       is_hashdiff: true
       columns:
+       - order_fk
+       - product_fk
        - discount_pct
        - unit_price
        - quantity

@@ -21,6 +21,11 @@ hashed_columns:
     ORDER_HASHDIFF:
       is_hashdiff: true
       columns:
+       - order_number
+       - order_date
+       - ship_date
+       - required_delivery_date
+       - freight
        - recipient_name
        - recipient_city
        - recipient_region
