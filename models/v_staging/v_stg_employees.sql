@@ -10,6 +10,8 @@ hashed_columns:
     EMPLOYEE_HASHDIFF:
       is_hashdiff: true
       columns:
+       - employee_pk
+       - manager_fk
        - employee_name
        - employee_title
        - employee_birth_date

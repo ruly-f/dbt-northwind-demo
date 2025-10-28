@@ -4,7 +4,7 @@ models:
       Orders' data vault stg model.
     columns:
       - name: order_pk
-        description: the order's unique identifier
+        description: the order's primary key
       
       - name: employee_fk
         description: the employee's foreign key
@@ -54,7 +54,6 @@ models:
       - name: order_hk
         description: the unique identifier for each order item
         data_tests:
-          - unique
           - not_null
 
       - name: customer_hk

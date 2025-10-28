@@ -9,6 +9,7 @@ hashed_columns:
     SHIPPER_HASHDIFF:
       is_hashdiff: true
       columns:
+       - shipper_pk
        - shipper_name
 {% endset %}
 

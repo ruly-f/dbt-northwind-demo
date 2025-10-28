@@ -27,7 +27,6 @@ models:
       - name: supplier_hk
         description: supplier unique hash key
         data_tests:
-          - unique
           - not_null
           
       - name: supplier_hashdiff

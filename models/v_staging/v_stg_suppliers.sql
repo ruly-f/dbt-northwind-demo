@@ -9,6 +9,7 @@ hashed_columns:
     SUPPLIER_HASHDIFF:
       is_hashdiff: true
       columns:
+       - supplier_pk
        - supplier_name
        - supplier_city
        - supplier_country

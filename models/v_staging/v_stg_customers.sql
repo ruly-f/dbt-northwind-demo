@@ -9,6 +9,7 @@ hashed_columns:
     CUSTOMER_HASHDIFF:
       is_hashdiff: true
       columns:
+       - customer_pk
        - customer_company_name
        - customer_city
        - customer_region

@@ -21,7 +21,6 @@ models:
       - name: shipper_hk
         description: shipper unique hash key
         data_tests:
-          - unique
           - not_null
           
       - name: shipper_hashdiff

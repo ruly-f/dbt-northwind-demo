@@ -17,6 +17,7 @@ hashed_columns:
     PRODUCT_HASHDIFF:
       is_hashdiff: true
       columns:
+       - product_pk
        - quantity_per_unit
        - unit_price
        - units_in_stock

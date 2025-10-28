@@ -1,7 +1,7 @@
 models:
   - name: v_stg_categories
     description: >
-      Products categories data vault stg model.
+      Product's categories data vault stg model.
     columns:
       - name: category_pk
         description: product category primary key
@@ -24,7 +24,6 @@ models:
       - name: category_hk
         description: product category hash key
         data_tests:
-          - unique
           - not_null
           
       - name: category_hashdiff

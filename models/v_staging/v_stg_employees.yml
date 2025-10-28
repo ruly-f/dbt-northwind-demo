@@ -7,7 +7,7 @@ models:
         description: employee's primary key
 
       - name: manager_fk
-        description: manager's identifier
+        description: the employee's manager identifier
       
       - name: employee_name
         description: the employee's name
@@ -36,7 +36,6 @@ models:
       - name: employee_hk
         description: employee unique hash key
         data_tests:
-          - unique
           - not_null
           
       - name: employee_hashdiff

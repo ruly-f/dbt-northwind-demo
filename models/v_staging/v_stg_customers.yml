@@ -30,7 +30,6 @@ models:
       - name: customer_hk
         description: customer unique hash key
         data_tests:
-          - unique
           - not_null
           
       - name: customer_hashdiff

@@ -9,6 +9,7 @@ hashed_columns:
     CATEGORY_HASHDIFF:
       is_hashdiff: true
       columns:
+       - category_pk
        - category_name
        - category_description
 {% endset %}

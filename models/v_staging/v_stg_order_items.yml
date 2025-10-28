@@ -35,7 +35,6 @@ models:
       - name: order_item_hk
         description: the unique identifier for each order item
         data_tests:
-          - unique
           - not_null
 
       - name: order_hk

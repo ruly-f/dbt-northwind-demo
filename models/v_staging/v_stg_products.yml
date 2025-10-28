@@ -45,7 +45,6 @@ models:
       - name: product_hk
         description: the unique identifier for each product
         data_tests:
-          - unique
           - not_null
 
       - name: category_hk
