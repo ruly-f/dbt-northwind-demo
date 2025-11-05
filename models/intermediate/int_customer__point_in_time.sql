@@ -12,7 +12,7 @@ with
     delta_customers as (
         select *
         from {{ ref('stg_erp__customers') }}
-        here load_ts::timestamp > (select max(load_ts) from {{ this }} )
+        where load_ts::timestamp > (select max(load_ts) from {{ this }} )
     )
 
 
@@ -23,7 +23,21 @@ with
     )
 
     , customers as (
-        select *
+        select
+            customer_hk,
+            customer_pk,
+            customer_company_name,
+            customer_city,
+            customer_region,
+            customer_country,
+            customer_postal_code,
+            customer_phone,
+            customer_fax,
+            null as customer_active,
+            load_ts,
+            insert_ts,
+            null as valid_from,
+            null as valid_to
         from delta_customers
         union all
         select *
@@ -47,6 +61,9 @@ with
             , customer_city
             , customer_region
             , customer_country
+            , customer_postal_code
+            , customer_phone
+            , customer_fax
             , case 
                 when row_number() over(
                     partition by customer_pk
@@ -67,9 +84,16 @@ with
             customer_city,
             customer_region,
             customer_country,
+            customer_postal_code,
+            customer_phone,
+            customer_fax,
             customer_active,
             load_ts,
-            insert_ts as valid_from,
+            insert_ts,
+            case 
+                when row_number() over (partition by customer_pk order by insert_ts) = 1 then '1970-01-01'
+                else insert_ts
+            end as valid_from,
             lead(insert_ts, 1) over (
                 partition by customer_pk
                 order by insert_ts

@@ -22,13 +22,19 @@ with
                 'companyname',
                 'city',
                 'region',
-                'country'
+                'country',
+                'postalcode',
+                'phone',
+                'fax'
             ]) }} as customer_hk
             , cast(id as varchar) as customer_pk
             , cast(companyname as varchar) as customer_company_name
             , cast(city as varchar) as customer_city
             , cast(region as varchar) as customer_region
             , cast(country as varchar) as customer_country
+            , cast(postalcode as varchar) as customer_postal_code
+            , cast(phone as varchar) as customer_phone
+            , cast(fax as varchar) as customer_fax
             , cast(load_ts as timestamp) as load_ts
             , cast(load_ts as timestamp) + interval '2 hours' as insert_ts
         from source_customers
