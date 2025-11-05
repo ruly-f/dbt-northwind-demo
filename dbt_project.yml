@@ -52,4 +52,4 @@ models:
       erp:
 
 vars:
-  load_date: '2014-05-07'
+  load_date: '2014-05-05'

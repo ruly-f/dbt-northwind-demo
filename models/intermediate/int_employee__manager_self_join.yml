@@ -1,5 +1,5 @@
 models:
-  - name: int_employee__self_join_for_manager
+  - name: int_employee__manager_self_join
     description: >
       Intermediate model that joins employees to their managers using a self join,
       enriching employee records with manager names.

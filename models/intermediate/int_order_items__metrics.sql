@@ -1,12 +1,26 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='order_item_sk',
+        on_schema_change='append_new_columns'
+    )
+}}
+
 with
     orders as (
         select *
         from {{ ref('stg_erp__orders') }}
+        {% if is_incremental() %}
+            where load_ts::timestamp > (select max(load_ts) from {{ this }} )
+        {% endif %}
     )
 
     , order_items as (
         select *
         from {{ ref('stg_erp__order_items') }}
+        {% if is_incremental() %}
+            where load_ts::timestamp > (select max(load_ts) from {{ this }} )
+        {% endif %}
     )
 
     , joined as (
