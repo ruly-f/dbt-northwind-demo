@@ -1,0 +1,11 @@
+snapshots:
+  - name: snp_erp__suppliers
+    relation: ref('stg_erp__suppliers')
+    config:
+      schema: snapshots
+      unique_key: supplier_pk
+      strategy: check
+      check_cols:
+        - supplier_name
+        - supplier_city
+        - supplier_country

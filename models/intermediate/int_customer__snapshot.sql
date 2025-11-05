@@ -53,29 +53,6 @@ with
 
     {% endif %}
 
-    , active_customers as (
-        select
-            customer_hk
-            , customer_pk
-            , customer_company_name
-            , customer_city
-            , customer_region
-            , customer_country
-            , customer_postal_code
-            , customer_phone
-            , customer_fax
-            , case 
-                when row_number() over(
-                    partition by customer_pk
-                    order by insert_ts desc
-                    ) = 1 then true
-                else false
-             end as customer_active
-            , load_ts
-            , insert_ts
-        from customers
-    )
-
     , interval_customers as (
         select
             customer_hk,
@@ -87,7 +64,13 @@ with
             customer_postal_code,
             customer_phone,
             customer_fax,
-            customer_active,
+            case 
+                when row_number() over(
+                    partition by customer_pk
+                    order by insert_ts desc
+                    ) = 1 then true
+                else false
+            end as customer_active,
             load_ts,
             insert_ts,
             case 
@@ -98,7 +81,7 @@ with
                 partition by customer_pk
                 order by insert_ts
             ) - interval '1 day' as valid_to
-        from active_customers
+        from customers
     )
 
 select *

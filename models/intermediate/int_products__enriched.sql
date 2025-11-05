@@ -2,17 +2,17 @@ with
     -- call required staging models
     categories as (
         select *
-        from {{ ref('stg_erp__categories') }}
+        from {{ ref('snp_erp__categories') }}
     )
 
     , suppliers as (
         select *
-        from {{ ref('stg_erp__suppliers') }}
+        from {{ ref('snp_erp__suppliers') }}
     )
 
     , products as (
         select *
-        from {{ ref('stg_erp__products') }}
+        from {{ ref('int_product__snapshot.') }}
     )
 
     , enrich_products as (

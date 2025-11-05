@@ -1,0 +1,16 @@
+snapshots:
+  - name: snp_erp__employees
+    relation: ref('stg_erp__employees')
+    config:
+      schema: snapshots
+      unique_key: employee_pk
+      strategy: check
+      check_cols:
+        - manager_fk
+        - employee_name
+        - employee_title
+        - employee_birth_date
+        - employee_hire_date
+        - employee_city
+        - employee_region
+        - employee_country

@@ -1,0 +1,9 @@
+snapshots:
+  - name: snp_erp__shippers
+    relation: ref('stg_erp__shippers')
+    config:
+      schema: snapshots
+      unique_key: shipper_pk
+      strategy: check
+      check_cols:
+        - shipper_name

@@ -1,0 +1,10 @@
+snapshots:
+  - name: snp_erp__categories
+    relation: ref('stg_erp__categories')
+    config:
+      schema: snapshots
+      unique_key: category_pk
+      strategy: check
+      check_cols:
+        - category_name
+        - category_description
