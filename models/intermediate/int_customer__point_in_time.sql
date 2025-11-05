@@ -1,0 +1,81 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='customer_hk',
+        on_schema_change='append_new_columns'
+    )
+}}
+
+with
+    {% if is_incremental() %}
+
+    delta_customers as (
+        select *
+        from {{ ref('stg_erp__customers') }}
+        here load_ts::timestamp > (select max(load_ts) from {{ this }} )
+    )
+
+
+    , historic_customers as (
+        select *
+        from {{ this }}
+        where customer_pk in (select customer_pk from delta_customers)
+    )
+
+    , customers as (
+        select *
+        from delta_customers
+        union all
+        select *
+        from historic_customers
+    )
+
+    {% else %}
+
+    customers as (
+        select *
+        from {{ ref('stg_erp__customers') }}
+    )
+
+    {% endif %}
+
+    , active_customers as (
+        select
+            customer_hk
+            , customer_pk
+            , customer_company_name
+            , customer_city
+            , customer_region
+            , customer_country
+            , case 
+                when row_number() over(
+                    partition by customer_pk
+                    order by insert_ts desc
+                    ) = 1 then true
+                else false
+             end as customer_active
+            , load_ts
+            , insert_ts
+        from customers
+    )
+
+    , interval_customers as (
+        select
+            customer_hk,
+            customer_pk,
+            customer_company_name,
+            customer_city,
+            customer_region,
+            customer_country,
+            customer_active,
+            load_ts,
+            insert_ts as valid_from,
+            lead(insert_ts, 1) over (
+                partition by customer_pk
+                order by insert_ts
+            ) - interval '1 day' as valid_to
+        from active_customers
+    )
+
+select *
+from interval_customers

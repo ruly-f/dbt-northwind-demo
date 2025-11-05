@@ -1,7 +1,7 @@
 with
     source_suppliers as (
         select *
-        from {{ source('erp', 'suppliers') }}
+        from {{ ref('base_erp__suppliers') }}
     )
 
     , renamed as (
@@ -10,6 +10,7 @@ with
             , cast(companyname as varchar) as supplier_name
             , cast(city as varchar) as supplier_city
             , cast(country as varchar) as supplier_country
+            , cast(load_ts as timestamp) as load_ts
         from source_suppliers
     )
 

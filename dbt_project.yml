@@ -50,3 +50,6 @@ models:
       +materialized: view
       +schema: stg
       erp:
+
+vars:
+  load_date: 2014-05-05
