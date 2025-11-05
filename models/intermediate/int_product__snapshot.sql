@@ -24,22 +24,22 @@ with
 
     , products as (
         select
-            product_hk,
-            product_pk,
-            supplier_fk,
-            category_fk,
-            product_name,
-            quantity_per_unit,
-            unit_price,
-            units_in_stock,
-            units_on_order,
-            reorder_level,
-            is_discontinued,
-            null as product_active,
-            load_ts,
-            insert_ts,
-            null as valid_from,
-            null as valid_to
+            product_hk
+            , product_pk
+            , supplier_fk
+            , category_fk
+            , product_name
+            , quantity_per_unit
+            , unit_price
+            , units_in_stock
+            , units_on_order
+            , reorder_level
+            , is_discontinued
+            , null as product_active
+            , load_ts
+            , insert_ts
+            , null as valid_from
+            , null as valid_to
         from delta_products
         union all
         select *
@@ -57,34 +57,37 @@ with
 
     , interval_products as (
         select
-            product_hk,
-            product_pk,
-            supplier_fk,
-            category_fk,
-            product_name,
-            quantity_per_unit,
-            unit_price,
-            units_in_stock,
-            units_on_order,
-            reorder_level,
-            is_discontinued,
-            case 
+            product_hk
+            , product_pk
+            , supplier_fk
+            , category_fk
+            , product_name
+            , quantity_per_unit
+            , unit_price
+            , units_in_stock
+            , units_on_order
+            , reorder_level
+            , is_discontinued
+            , case 
                 when row_number() over(
                     partition by product_pk
                     order by insert_ts desc
                 ) = 1 then true
                 else false
-            end as product_active,
-            load_ts,
-            insert_ts,
-            case 
+            end as product_active
+            , load_ts
+            , insert_ts
+            , case 
                 when row_number() over (partition by product_pk order by insert_ts) = 1 then timestamp '1970-01-01 00:00:00'
                 else insert_ts
-            end as valid_from,
-            lead(insert_ts, 1) over (
-                partition by product_pk
-                order by insert_ts
-            ) - interval '1 day' as valid_to
+            end as valid_from
+            , coalesce(
+                lead(insert_ts, 1) over (
+                    partition by product_pk
+                    order by insert_ts
+                ) - interval '1 day'
+                , '2099-01-01'
+            ) as valid_to
         from products
     )
 
