@@ -78,10 +78,10 @@ with
         inner join orders on order_items.order_fk = orders.order_pk
         left join customers_snp
             on customers_snp.customer_pk = orders.customer_fk
-            and orders.order_date between customers_snp.valid_from and customers_snp.valid_to
+            and orders.order_date between customers_snp.valid_from::date and customers_snp.valid_to::date
         left join products_snp
             on products_snp.product_pk = order_items.product_fk
-            and orders.order_date between products_snp.valid_from and products_snp.valid_to
+            and orders.order_date between products_snp.valid_from::date and products_snp.valid_to::date
     )
 
 select *

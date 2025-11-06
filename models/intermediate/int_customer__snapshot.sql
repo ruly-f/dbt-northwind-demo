@@ -48,7 +48,7 @@ with
 
     customers as (
         select *
-        from {{ ref('stg_erp__customers') }}
+        from {{ ref('int_customer__base') }}
     )
 
     {% endif %}
