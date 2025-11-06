@@ -28,7 +28,7 @@ with
         select *
         from {{ ref('int_customer__snapshot') }}
         {% if is_incremental() %}
-            where customer_pk in (select customer_pk from orders)
+            where customer_pk in (select customer_fk from orders)
         {% endif %}
     )
 

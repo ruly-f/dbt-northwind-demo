@@ -1,0 +1,21 @@
+models:
+  - name: dim_shippers
+    description: Dimension table containing information about shipping companies used for order deliveries.
+    columns:
+      - name: shipper_pk
+        description: Unique identifier for each shipping company.
+        tests:
+          - unique
+          - not_null
+
+      - name: shipper_name
+        description: Name of the shipping company.
+
+      - name: load_ts
+        description: Source system load timestamp for the shipper snapshot row.
+
+      - name: dbt_valid_from
+        description: Timestamp when this snapshot version of the shipper became valid.
+
+      - name: dbt_valid_to
+        description: Timestamp when this snapshot version of the shipper ceased to be valid.

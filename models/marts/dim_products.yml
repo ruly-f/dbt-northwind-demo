@@ -1,23 +1,21 @@
 models:
-  - name: int_products__enriched
+  - name: dim_products
     description: Model that enriches product data with category and supplier information.
     columns:
+      - name: product_pk
+        description: Unique identifier for each product.
+
       - name: product_hk
-        description: Hash key representing a specific version of a product record.
-        tests:
+        description: Snapshot hash key identifying the specific version of the product record.
+        data_tests:
           - unique
           - not_null
 
-      - name: product_pk
-        description: Unique identifier for each product.
-        tests:
-          - not_null
-
       - name: supplier_fk
-        description: Foreign key referencing the supplier associated with the product.
+        description: Foreign key referencing the supplier providing the product.
 
       - name: category_fk
-        description: Foreign key referencing the product category.
+        description: Foreign key referencing the category of the product.
 
       - name: product_name
         description: Name of the product.
@@ -41,7 +39,7 @@ models:
         description: Indicates whether the product is discontinued.
 
       - name: product_active
-        description: Flag indicating whether the record represents the currently active version of the product.
+        description: Flag indicating if this row represents the current active version of the product.
 
       - name: category_name
         description: Name of the category associated with the product.
@@ -56,13 +54,13 @@ models:
         description: Country where the supplier is located.
 
       - name: load_ts
-        description: Source system load timestamp for this product record snapshot.
+        description: Source system load timestamp for this product snapshot.
 
       - name: insert_ts
         description: Timestamp when the record was inserted into the warehouse layer.
 
       - name: valid_from
-        description: Timestamp indicating when this version of the product became effective.
+        description: Timestamp indicating when this product version became effective.
 
       - name: valid_to
-        description: Timestamp indicating when this version of the product ceased to be effective.
+        description: Timestamp indicating when this product version ceased to be effective.

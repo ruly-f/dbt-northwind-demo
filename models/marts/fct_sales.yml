@@ -5,6 +5,12 @@ models:
       - name: order_item_sk
         description: Primary key of fct_sales model.
 
+      - name: customer_hk
+        description: Snapshot hash key representing the customer state when the order was placed.
+
+      - name: product_hk
+        description: Snapshot hash key representing the product state when the order was placed.
+
       - name: product_fk
         description: Foreign key referencing the product.
 
@@ -64,3 +70,9 @@ models:
 
       - name: recipient_country
         description: Country where the order was delivered.
+
+      - name: load_ts
+        description: Source system load timestamp for the order record.
+
+      - name: insert_ts
+        description: Timestamp when the order item metrics row was inserted into the warehouse layer.

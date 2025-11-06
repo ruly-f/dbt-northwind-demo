@@ -1,0 +1,56 @@
+models:
+  - name: int_products__snapshot
+    description: Type 2 snapshot table capturing historical product attributes and activity flags.
+    columns:
+      - name: product_hk
+        description: Hash key uniquely identifying a specific product state.
+        tests:
+          - unique
+          - not_null
+
+      - name: product_pk
+        description: Business identifier for the product.
+        tests:
+          - not_null
+
+      - name: supplier_fk
+        description: Foreign key referencing the product supplier.
+
+      - name: category_fk
+        description: Foreign key referencing the product category.
+
+      - name: product_name
+        description: Name of the product for the captured state.
+
+      - name: quantity_per_unit
+        description: Packaging or quantity description for the product.
+
+      - name: unit_price
+        description: Unit price for the product during the captured state.
+
+      - name: units_in_stock
+        description: Quantity currently in stock when the snapshot was taken.
+
+      - name: units_on_order
+        description: Quantity on order when the snapshot was taken.
+
+      - name: reorder_level
+        description: Stock threshold that triggers replenishment.
+
+      - name: is_discontinued
+        description: Flag indicating whether the product was discontinued.
+
+      - name: product_active
+        description: Flag indicating whether this record represents the most recent product version.
+
+      - name: load_ts
+        description: Source system load timestamp for the snapshot record.
+
+      - name: insert_ts
+        description: Timestamp when the snapshot record was inserted into the warehouse layer.
+
+      - name: valid_from
+        description: Timestamp when this product version became effective.
+
+      - name: valid_to
+        description: Timestamp when this product version ceased to be effective.

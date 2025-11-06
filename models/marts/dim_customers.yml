@@ -1,0 +1,50 @@
+models:
+  - name: dim_customers
+    description: >
+      Dimension table that contains customer information including company name and location details.
+      This table is used to support analyses related to customer behavior, regional sales, and order distribution.
+    columns:
+      - name: customer_pk
+        description: Unique identifier for each customer.
+
+      - name: customer_hk
+        description: Snapshot hash key identifying the specific version of the customer record.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: customer_company_name
+        description: Name of the customer's company.
+
+      - name: customer_city
+        description: City where the customer is located.
+
+      - name: customer_region
+        description: Region where the customer is located.
+
+      - name: customer_country
+        description: Country where the customer is located.
+
+      - name: customer_postal_code
+        description: Postal or ZIP code associated with the customer.
+
+      - name: customer_phone
+        description: Primary phone number for the customer.
+
+      - name: customer_fax
+        description: Fax number for the customer when provided.
+
+      - name: customer_active
+        description: Flag indicating whether this row represents the current active version of the customer.
+
+      - name: load_ts
+        description: Source system load timestamp for the customer snapshot.
+
+      - name: insert_ts
+        description: Timestamp when the snapshot row was inserted into the warehouse layer.
+
+      - name: valid_from
+        description: Timestamp indicating when this customer version became effective.
+
+      - name: valid_to
+        description: Timestamp indicating when this customer version ceased to be effective.

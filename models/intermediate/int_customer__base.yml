@@ -1,0 +1,44 @@
+models:
+  - name: int_customer__base
+    description: Consolidated customer base combining ERP and CRM sourced attributes.
+    columns:
+      - name: customer_hk
+        description: Hash key representing a specific customer version from any source.
+        tests:
+          - unique
+          - not_null
+
+      - name: customer_pk
+        description: Business identifier for the customer.
+        tests:
+          - not_null
+
+      - name: customer_company_name
+        description: Name of the customer organisation.
+
+      - name: customer_city
+        description: City associated with the customer record.
+
+      - name: customer_region
+        description: Region associated with the customer record when available.
+
+      - name: customer_country
+        description: Country associated with the customer record.
+
+      - name: customer_postal_code
+        description: Postal or ZIP code for the customer.
+
+      - name: customer_phone
+        description: Primary phone number for the customer.
+
+      - name: customer_fax
+        description: Fax number for the customer if provided.
+
+      - name: customer_tier
+        description: Customer segmentation tier sourced from CRM systems.
+
+      - name: load_ts
+        description: Source system load timestamp for the record.
+
+      - name: insert_ts
+        description: Timestamp when the record was inserted into the warehouse layer.

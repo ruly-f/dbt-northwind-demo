@@ -2,7 +2,8 @@ with
     -- call required staging model
     employees as (
         select *
-        from {{ ref('stg_erp__employees') }}
+        from {{ ref('snp_erp__employees') }}
+        where dbt_valid_to is null
     )
 
     , self_joined as (
@@ -16,6 +17,8 @@ with
             , employees.employee_city
             , employees.employee_region
             , employees.employee_country
+            , employees.load_ts
+            , employees.insert_ts
         from employees
         left join employees as managers
             on employees.manager_fk = managers.employee_pk

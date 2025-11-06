@@ -1,9 +1,8 @@
 with
     dim_employee as (
         select *
-        from {{ ref('int_employee__self_join_for_manager') }}
+        from {{ ref('int_employee__manager_self_join') }}
     )
 
 select *
 from dim_employee
--- add

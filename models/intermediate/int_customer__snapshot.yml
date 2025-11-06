@@ -1,0 +1,50 @@
+models:
+  - name: int_customer__snapshot
+    description: Type 2 snapshot table capturing historical customer attributes and activity flags.
+    columns:
+      - name: customer_hk
+        description: Hash key uniquely identifying a specific customer state.
+        tests:
+          - unique
+          - not_null
+
+      - name: customer_pk
+        description: Business identifier for the customer.
+        tests:
+          - not_null
+
+      - name: customer_company_name
+        description: Name of the customer organisation.
+
+      - name: customer_city
+        description: City associated with the customer.
+
+      - name: customer_region
+        description: Region associated with the customer when provided.
+
+      - name: customer_country
+        description: Country associated with the customer.
+
+      - name: customer_postal_code
+        description: Postal or ZIP code for the customer.
+
+      - name: customer_phone
+        description: Primary phone number for the customer.
+
+      - name: customer_fax
+        description: Fax number for the customer if available.
+
+      - name: customer_active
+        description: Flag indicating whether this record represents the most recent customer version.
+
+      - name: load_ts
+        description: Source system load timestamp for the snapshot record.
+
+      - name: insert_ts
+        description: Timestamp when the snapshot record was inserted into the warehouse layer.
+
+      - name: valid_from
+        description: Timestamp when this customer version became effective.
+
+      - name: valid_to
+        description: Timestamp when this customer version ceased to be effective.

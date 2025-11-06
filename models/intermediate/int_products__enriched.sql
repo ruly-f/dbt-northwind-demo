@@ -14,7 +14,7 @@ with
 
     , products as (
         select *
-        from {{ ref('int_product__snapshot') }}
+        from {{ ref('int_products__snapshot') }}
     )
     -- Joined
     , enrich_products as (

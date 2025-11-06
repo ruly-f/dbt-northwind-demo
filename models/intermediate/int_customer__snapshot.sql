@@ -11,7 +11,7 @@ with
 
     delta_customers as (
         select *
-        from {{ ref('stg_erp__customers') }}
+        from {{ ref('int_customer__base') }}
         where load_ts::timestamp > (select max(load_ts) from {{ this }} )
     )
 

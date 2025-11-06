@@ -34,3 +34,9 @@ models:
 
       - name: employee_country
         description: Country where the employee is located.
+
+      - name: load_ts
+        description: Source system load timestamp for the employee snapshot row.
+
+      - name: insert_ts
+        description: Timestamp when the employee record was inserted into the warehouse layer.
