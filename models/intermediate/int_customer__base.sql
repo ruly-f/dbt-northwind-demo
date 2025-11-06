@@ -29,10 +29,11 @@ with
             , load_ts
             , insert_ts
         from {{ ref('stg_erp__customers') }}
+        where false
     )
 
     -- schema compatibilization
-    union_customers as (
+    , union_customers as (
         select
             customer_hk
             , customer_pk

@@ -18,7 +18,6 @@ with
             , employees.employee_region
             , employees.employee_country
             , employees.load_ts
-            , employees.insert_ts
         from employees
         left join employees as managers
             on employees.manager_fk = managers.employee_pk

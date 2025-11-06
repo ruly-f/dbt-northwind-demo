@@ -1,6 +1,11 @@
 with
     -- Import CTEs
-    categories as (
+    products as (
+        select *
+        from {{ ref('int_products__snapshot') }}
+    )
+
+    , categories as (
         select *
         from {{ ref('snp_erp__categories') }}
         where dbt_valid_to is null
@@ -12,10 +17,6 @@ with
         where dbt_valid_to is null
     )
 
-    , products as (
-        select *
-        from {{ ref('int_products__snapshot') }}
-    )
     -- Joined
     , enrich_products as (
         select

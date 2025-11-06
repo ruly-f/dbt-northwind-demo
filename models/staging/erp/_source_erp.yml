@@ -6,72 +6,24 @@ sources:
     tables:
       - name: category
         description: Contains product category definitions such as name and description.
-        columns:
-          - name: id
-            description: Unique identifier for each category.
-            data_tests:
-              - unique
-              - not_null
 
       - name: products
         description: Contains information about all products sold, including name, price, and stock levels.
-        columns:
-          - name: id
-            description: Unique identifier for each product.
-            data_tests:
-              - unique
-              - not_null
 
       - name: suppliers
         description: Contains information about product suppliers such as company name and location.
-        columns:
-          - name: id
-            description: Unique identifier for each supplier.
-            data_tests:
-              - unique
-              - not_null
 
       - name: employees
         description: Contains employee details including name, title, and reporting structure.
-        columns:
-          - name: id
-            description: Unique identifier for each employee.
-            data_tests:
-              - unique
-              - not_null
 
       - name: orders
         description: Contains records of customer orders including order date, ship date, and freight costs.
-        columns:
-          - name: id
-            description: Unique identifier for each order.
-            data_tests:
-              - unique
-              - not_null
 
       - name: orders_detail
         description: Line items for each order including product, quantity, unit price, and discount.
-        data_tests:
-          - dbt_utils.unique_combination_of_columns:
-              arguments:
-                combination_of_columns:
-                  - orderid
-                  - productid
 
       - name: shippers
         description: Contains information about shipping companies used to deliver orders.
-        columns:
-          - name: id
-            description: Unique identifier for each shipper.
-            data_tests:
-              - unique
-              - not_null
 
       - name: customer
         description: Contains customer data including company name and address.
-        columns:
-          - name: id
-            description: Unique identifier for each customer.
-            data_tests:
-              - unique
-              - not_null

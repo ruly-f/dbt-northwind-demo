@@ -1,6 +1,6 @@
 models:
-  - name: fct_sales
-    description: Fact model with sales data and metrics.
+  - name: fct_transactions
+    description: Fact model with transaction data and metrics.
     columns:
       - name: order_item_sk
         description: Primary key of fct_sales model.

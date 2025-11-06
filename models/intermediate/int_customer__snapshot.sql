@@ -5,7 +5,7 @@
         on_schema_change='append_new_columns'
     )
 }}
-
+-- depends on: {{ ref('int_customer__base') }}
 with
     {% if is_incremental() %}
 

@@ -37,6 +37,3 @@ models:
 
       - name: load_ts
         description: Source system load timestamp for the employee snapshot row.
-
-      - name: insert_ts
-        description: Timestamp when the employee record was inserted into the warehouse layer.
