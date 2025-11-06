@@ -10,9 +10,15 @@ src_hashdiff:
   alias: "HASHDIFF"
 src_payload:
   - customer_company_name
+  - customer_contact_name
+  - customer_contact_title
+  - customer_address
   - customer_city
   - customer_region
   - customer_country
+  - customer_postal_code
+  - customer_phone
+  - customer_fax
 src_eff: "EFFECTIVE_FROM"
 src_ldts: "LOAD_DATE"
 src_source: "RECORD_SOURCE"

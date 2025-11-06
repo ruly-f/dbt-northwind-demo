@@ -1,9 +1,16 @@
+{{
+    config(
+        materialized='incremental'
+        , unique_key='order_item_sk'
+    )
+}}
+
 {% set yaml_metadata %}
 source_model: raw_order_items
 derived_columns:
     RECORD_SOURCE: "!ERP-ORDER_DETAILS"
-    LOAD_DATE: dateadd(DAY, 15, current_timestamp())
-    EFFECTIVE_FROM: current_timestamp()
+    LOAD_DATE: load_ts
+    EFFECTIVE_FROM: load_ts
 hashed_columns:
     ORDER_ITEM_HK:
       - order_fk
@@ -32,3 +39,9 @@ hashed_columns:
         , ranked_columns=none
     )
 }}
+
+{% if is_incremental %}
+
+where load_ts > (select coalesce(max(load_ts), '1900-01-01') from {{ this }} )
+
+{% endif %}

@@ -12,6 +12,7 @@ with
             , cast(discount as numeric(18,2)) as discount_pct
             , cast(unitprice as numeric(18,2)) as unit_price
             , cast(quantity as int) as quantity
+            , cast(load_ts as timestamp) as load_ts
         from source_order_details
     )
 

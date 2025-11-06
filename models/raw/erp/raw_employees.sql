@@ -15,6 +15,7 @@ with
             , cast(city as varchar) as employee_city
             , cast(region as varchar) as employee_region
             , cast(country as varchar) as employee_country
+            , cast(load_ts as timestamp) as load_ts
             -- , cast(titleofcourtesy as varchar)
             -- , cast(address as varchar) 
             -- , cast(postalcode as varchar) 

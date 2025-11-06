@@ -16,6 +16,7 @@ with
             , cast(unitsonorder as int) as units_on_order
             , cast(reorderlevel as int) as reorder_level
             , discontinued as is_discontinued
+            , cast(load_ts as timestamp) as load_ts
         from source_products
     )
 

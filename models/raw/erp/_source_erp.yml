@@ -1,7 +1,7 @@
 sources:
   - name: erp
     description: Northwind sales system.
-    schema: RAW_NORTHWIND
+    schema: RAW_NORTHWIND_DV
     database: MESH_RAW_DB
     tables:
       - name: category

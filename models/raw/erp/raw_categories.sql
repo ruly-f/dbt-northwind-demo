@@ -9,8 +9,10 @@ with
             cast(id as int) as category_pk
             , cast(categoryname as string) as category_name
             , cast(description as string) as category_description
+            , cast(load_ts as timestamp) as load_ts
         from source_categories
     )
 
 select *
 from renamed
+-- where load_ts <= '2014-05-05 00:00:00.000'

@@ -29,6 +29,11 @@ with
         from {{ ref('link_orders_shippers') }}
     )
 
+    , int_customers as (
+        select *
+        from {{ ref('int_customers') }}
+    )
+
     , joined as (
         select
             /* Primary Link Keys */
@@ -38,6 +43,7 @@ with
             /* Secondary Link Keys */
             , link_orders_employees.employee_hk
             , link_orders_customers.customer_hk
+            , int_customers.customer_hashdiff
             , link_orders_shippers.shipper_hk
             /* Satellite Attributes */
             , sat_orders.order_date
@@ -52,6 +58,8 @@ with
             , sat_orders.recipient_city
             , sat_orders.recipient_region
             , sat_orders.recipient_country
+            , sat_orders.load_date
+            , sat_orders.effective_from
         from link_orders_products
         left join sat_order_items
             on link_orders_products.order_item_hk = sat_order_items.order_item_hk
@@ -63,14 +71,19 @@ with
             on link_orders_products.order_hk = link_orders_employees.order_hk
         left join link_orders_shippers
             on link_orders_products.order_hk = link_orders_shippers.order_hk
+        left join int_customers
+            on link_orders_customers.customer_hk = int_customers.customer_hk
+            and sat_orders.order_date between int_customers.start_date and int_customers.end_date
     )
 
     , metrics as (
         select 
             order_item_hk
+            , order_hk
             , product_hk
             , employee_hk
             , customer_hk
+            , customer_hashdiff
             , shipper_hk
             , order_date
             , ship_date
@@ -92,6 +105,8 @@ with
             , recipient_city
             , recipient_region
             , recipient_country
+            , effective_from
+            , load_date
         from joined
     )
 

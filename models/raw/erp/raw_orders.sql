@@ -19,8 +19,10 @@ with
             , cast(shipcity as string) as recipient_city
             , cast(shipregion as string) as recipient_region
             , cast(shipcountry as string) as recipient_country
+            , cast(load_ts as timestamp) as load_ts
         from source_orders
     )
 
 select *
 from renamed
+where load_ts <= '2014-05-07 00:00:00.000'

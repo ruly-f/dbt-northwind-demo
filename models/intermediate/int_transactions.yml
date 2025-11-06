@@ -1,21 +1,24 @@
 models:
-  - name: fct_sales
-    description: Fact model with sales data and metrics.
+  - name: int_transactions
+    description: Intermediate model that joins order items with orders to calculate financial metrics and enrich with delivery details.
     columns:
       - name: order_item_hk
-        description: Hash key of fct_sales model.
+        description: Unique identifier for each item in an order.
+        tests:
+          - unique
+          - not_null
 
       - name: product_hk
-        description: Hash key referencing the product.
+        description: Foreign key referencing the product.
 
       - name: employee_hk
-        description: Hash key referencing the employee responsible for the order.
+        description: Foreign key referencing the employee responsible for the order.
 
       - name: customer_hk
-        description: Hash key referencing the customer who placed the order.
+        description: Foreign key referencing the customer who placed the order.
 
       - name: shipper_hk
-        description: Hash key referencing the shipper used for delivery.
+        description: Foreign key referencing the shipper used for delivery.
 
       - name: order_date
         description: Date when the order was placed.

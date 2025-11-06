@@ -1,7 +1,7 @@
 with
     order_items_metrics as (
         select *
-        from {{ ref('int_order_items__metrics') }}
+        from {{ ref('int_transactions') }}
     )
 
 select *

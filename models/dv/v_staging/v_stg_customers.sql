@@ -1,9 +1,16 @@
+{{
+    config(
+        materialized='incremental'
+        , unique_key=['customer_pk', 'load_ts']
+    )
+}}
+
 {% set yaml_metadata %}
 source_model: raw_customers
 derived_columns:
     RECORD_SOURCE: "!ERP-CUSTOMERS"
-    LOAD_DATE: dateadd(DAY, -15, current_timestamp())
-    EFFECTIVE_FROM: current_timestamp()
+    LOAD_DATE: load_ts
+    EFFECTIVE_FROM: load_ts
 hashed_columns:
     CUSTOMER_HK: customer_pk
     CUSTOMER_HASHDIFF:
@@ -11,9 +18,15 @@ hashed_columns:
       columns:
        - customer_pk
        - customer_company_name
+       - customer_contact_name
+       - customer_contact_title
+       - customer_address
        - customer_city
        - customer_region
        - customer_country
+       - customer_postal_code
+       - customer_phone
+       - customer_fax
 {% endset %}
 
 {% set metadata_dict = fromyaml(yaml_metadata) %}
@@ -28,3 +41,10 @@ hashed_columns:
         , ranked_columns=none
     )
 }}
+
+{% if is_incremental %}
+
+where load_ts > (select coalesce(max(load_ts), '1900-01-01') from {{ this }} )
+
+{% endif %}
+
