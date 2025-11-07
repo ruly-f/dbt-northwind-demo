@@ -9,9 +9,10 @@
 with
     source_order_details as (
         select *
-        from {{ ref('base_erp__order_items') }}
+        from {{ source('erp', 'orders_detail') }}
+        where load_ts = '{{ var('load_date') }}'
         {% if is_incremental() %}
-            where load_ts::timestamp > (select max(load_ts) from {{ this }} )
+            and load_ts::timestamp > (select max(load_ts) from {{ this }} )
         {% endif %}
     )
 

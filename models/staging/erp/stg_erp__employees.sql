@@ -1,7 +1,7 @@
 with
     source_employees as (
         select *
-        from {{ ref('base_erp__employees') }}
+        from {{ source('erp', 'employees') }}
     )
 
     , renamed as (

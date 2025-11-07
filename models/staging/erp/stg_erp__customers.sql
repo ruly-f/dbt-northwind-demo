@@ -9,9 +9,10 @@
 with
     source_customers as (
         select *
-        from {{ ref('base_erp__customers') }}
+        from {{ source('erp', 'customer') }}
+        where load_ts = '{{ var('load_date') }}'
         {% if is_incremental() %}
-            where load_ts::timestamp > (select max(load_ts) from {{ this }} )
+            and load_ts::timestamp > (select max(load_ts) from {{ this }} )
         {% endif %}
     )
 
