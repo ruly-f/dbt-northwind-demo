@@ -1,5 +1,10 @@
 {{
-    config(materialized='incremental')
+    config(
+        materialized='incremental'
+        , unique_key=['customer_pk', 'load_date']
+        , incremental_strategy='merge'
+        , on_schema_change='sync_all_columns'
+    )
 }}
 
 {%- set source_model = "v_stg_customers" -%}
@@ -17,3 +22,9 @@
         source_model=source_model
     )
 }}
+
+{% if is_incremental %}
+
+where load_date > (select coalesce(max(load_date), '1900-01-01') from {{ this }} )
+
+{% endif %}
