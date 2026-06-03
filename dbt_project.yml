@@ -50,3 +50,4 @@ models:
       +materialized: view
       +schema: stg
       erp:
+        +tags: erp

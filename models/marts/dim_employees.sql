@@ -6,4 +6,3 @@ with
 
 select *
 from dim_employee
--- add

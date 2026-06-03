@@ -1,0 +1,12 @@
+models:
+  - name: dim_shippers
+    description: Dimension table containing information about shipping companies used for order deliveries.
+    columns:
+      - name: shipper_pk
+        description: Unique identifier for each shipping company.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: shipper_name
+        description: Name of the shipping company.

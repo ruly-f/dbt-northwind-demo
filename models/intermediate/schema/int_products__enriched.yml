@@ -1,10 +1,10 @@
 models:
-  - name: dim_products
+  - name: int_products__enriched
     description: Model that enriches product data with category and supplier information.
     columns:
       - name: product_pk
         description: Unique identifier for each product.
-        tests:
+        data_tests:
           - unique
           - not_null
 

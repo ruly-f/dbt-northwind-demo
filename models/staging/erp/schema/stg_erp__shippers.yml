@@ -1,0 +1,11 @@
+models:
+  - name: stg_erp__shippers
+    description: List of shippers standardized for use in the dimensional model.
+    columns:
+      - name: shipper_pk
+        description: Natural primary key coming from the ERP shippers table.
+        data_tests:
+          - unique
+          - not_null
+      - name: shipper_name
+        description: Shipping company name sourced from the ERP.

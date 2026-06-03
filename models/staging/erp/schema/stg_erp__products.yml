@@ -1,0 +1,27 @@
+models:
+  - name: stg_erp__products
+    description: Product attributes shaped for dimensional consumption with consistent typing.
+    columns:
+      - name: product_pk
+        description: Natural primary key coming from the ERP products table.
+        data_tests:
+          - unique
+          - not_null
+      - name: supplier_fk
+        description: Reference to the supplier that provides the product.
+      - name: category_fk
+        description: Reference to the category the product belongs to.
+      - name: product_name
+        description: Name of the product as shown to customers.
+      - name: quantity_per_unit
+        description: Text describing the package size or unit composition.
+      - name: unit_price
+        description: Current price per unit in the ERP source currency.
+      - name: units_in_stock
+        description: Quantity currently available in inventory.
+      - name: units_on_order
+        description: Quantity that has been ordered from suppliers but not yet received.
+      - name: reorder_level
+        description: Inventory threshold that should trigger stock replenishment.
+      - name: is_discontinued
+        description: Flag indicating whether the product is no longer being sold.

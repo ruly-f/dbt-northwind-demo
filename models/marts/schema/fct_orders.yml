@@ -1,0 +1,60 @@
+models:
+  - name: fct_orders
+    description: Order-grain fact table (one row per order) with total sales and freight metrics.
+    columns:
+      - name: order_pk
+        description: Primary key of the order fact table.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: order_number
+        description: Business identifier for the order.
+
+      - name: employee_fk
+        description: Foreign key referencing the employee who captured the order.
+
+      - name: customer_fk
+        description: Foreign key referencing the customer who placed the order.
+
+      - name: shipper_fk
+        description: Foreign key referencing the shipper used for delivery.
+
+      - name: order_date
+        description: Date when the order was placed.
+
+      - name: ship_date
+        description: Date when the order was shipped.
+
+      - name: required_delivery_date
+        description: Date the customer requested the order to be delivered.
+
+      - name: freight_total
+        description: Total freight cost charged for the entire order.
+
+      - name: total_quantity
+        description: Total number of units included in the order.
+
+      - name: gross_total
+        description: Total order amount before discounts.
+
+      - name: net_total
+        description: Total order amount after discounts.
+
+      - name: line_item_count
+        description: Number of distinct line items in the order.
+
+      - name: had_discount_flag
+        description: Indicates whether at least one line in the order received a discount.
+
+      - name: recipient_name
+        description: Name on the shipping label.
+
+      - name: recipient_city
+        description: City where the order was delivered.
+
+      - name: recipient_region
+        description: Region where the order was delivered.
+
+      - name: recipient_country
+        description: Country where the order was delivered.

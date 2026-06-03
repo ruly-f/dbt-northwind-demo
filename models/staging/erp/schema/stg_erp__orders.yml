@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: stg_erp__orders
+    description: Cleansed order headers with consistent naming for downstream facts.
+    columns:
+      - name: order_pk
+        description: Natural primary key coming from the ERP orders table.
+        data_tests:
+          - unique
+          - not_null
+      - name: employee_fk
+        description: Reference to the employee who captured the order.
+      - name: customer_fk
+        description: Reference to the customer who placed the order.
+      - name: shipper_fk
+        description: Reference to the shipper selected for fulfillment.
+      - name: order_number
+        description: Business-facing order identifier (mirrors the PK in this dataset).
+      - name: order_date
+        description: Date the order was placed in the ERP.
+      - name: ship_date
+        description: Date the order was shipped.
+      - name: required_delivery_date
+        description: Date requested by the customer for delivery.
+      - name: freight
+        description: Freight cost charged for the entire order.
+      - name: recipient_name
+        description: Name that appears on the shipping label.
+      - name: recipient_city
+        description: City for the shipping destination.
+      - name: recipient_region
+        description: Region or state for the shipping destination.
+      - name: recipient_country
+        description: Country for the shipping destination.

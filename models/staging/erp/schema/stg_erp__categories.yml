@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_erp__categories
+    description: Cleans and renames ERP category data for downstream dimensional models.
+    columns:
+      - name: category_pk
+        description: Natural primary key from the ERP categories table.
+        data_tests:
+          - unique
+          - not_null
+      - name: category_name
+        description: Human-friendly name of the product category.
+      - name: category_description
+        description: Free-form notes describing what products belong to the category.

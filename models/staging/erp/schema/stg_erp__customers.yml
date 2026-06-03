@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: stg_erp__customers
+    description: Canonicalized customer attributes ready for dimensional models.
+    columns:
+      - name: customer_pk
+        description: Natural primary key for the customer taken from the ERP.
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_company_name
+        description: Company name shown on customer invoices.
+      - name: customer_city
+        description: City portion of the customer's mailing address.
+      - name: customer_region
+        description: Region or state for the customer's mailing address.
+      - name: customer_country
+        description: Country for the customer's mailing address.

@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_erp__order_items
+    description: Order line grain dataset with typed metrics derived from the ERP detail line table.
+    columns:
+      - name: order_item_sk
+        description: Surrogate primary key representing an order line.
+        data_tests:
+          - unique
+          - not_null
+      - name: order_fk
+        description: Reference to the order associated with the line item.
+      - name: product_fk
+        description: Reference to the product sold on the line.
+      - name: discount_pct
+        description: Discount percentage applied to the line.
+      - name: unit_price
+        description: Unit price captured on the order line.
+      - name: quantity
+        description: Number of units purchased on the order line.
