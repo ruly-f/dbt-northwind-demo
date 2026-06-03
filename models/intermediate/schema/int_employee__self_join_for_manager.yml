@@ -1,13 +1,12 @@
 models:
-  - name: dim_employees
+  - name: int_employee__self_join_for_manager
     description: >
-      Dimension table that contains information about company employees, including personal and 
-      professional details such as name, title, hire date, and location. This dimension may also
-      include a self-join to provide the name of each employee's direct manager.
+      Intermediate model that joins employees to their managers using a self join,
+      enriching employee records with manager names.
     columns:
       - name: employee_pk
         description: Unique identifier for each employee.
-        tests:
+        data_tests:
           - unique
           - not_null
 

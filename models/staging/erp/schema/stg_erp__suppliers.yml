@@ -1,0 +1,15 @@
+models:
+  - name: stg_erp__suppliers
+    description: Standardized supplier dimension attributes sourced from the ERP system.
+    columns:
+      - name: supplier_pk
+        description: Natural primary key carried over from the ERP suppliers table.
+        data_tests:
+          - unique
+          - not_null
+      - name: supplier_name
+        description: Company name of the supplier.
+      - name: supplier_city
+        description: City where the supplier is located.
+      - name: supplier_country
+        description: Country where the supplier is located.

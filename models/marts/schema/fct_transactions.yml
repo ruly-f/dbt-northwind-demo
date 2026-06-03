@@ -1,0 +1,69 @@
+models:
+  - name: fct_transactions
+    description: Transaction-grain fact table (one row per order line item) with freight allocated evenly across the products.
+    columns:
+      - name: order_item_sk
+        description: Primary key of the transaction fact table.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: order_fk
+        description: Foreign key referencing the order header.
+
+      - name: product_fk
+        description: Foreign key referencing the product.
+
+      - name: employee_fk
+        description: Foreign key referencing the employee responsible for the order.
+
+      - name: customer_fk
+        description: Foreign key referencing the customer who placed the order.
+
+      - name: shipper_fk
+        description: Foreign key referencing the shipper used for delivery.
+
+      - name: order_date
+        description: Date when the order was placed.
+
+      - name: ship_date
+        description: Date when the order was shipped.
+
+      - name: required_delivery_date
+        description: Date the customer requested the order to be delivered.
+
+      - name: discount_pct
+        description: Discount percentage applied to the item.
+
+      - name: unit_price
+        description: Price per unit of the product.
+
+      - name: quantity
+        description: Quantity of the product ordered.
+
+      - name: gross_total
+        description: Total amount before discount for the order item (unit price * quantity).
+
+      - name: net_total
+        description: Total amount after discount for the order item.
+
+      - name: freight_allocated
+        description: Freight cost allocated to the order item (order freight divided evenly across items).
+
+      - name: had_discount
+        description: Indicates whether a discount was applied to the item.
+
+      - name: order_number
+        description: Human-readable identifier of the order.
+
+      - name: recipient_name
+        description: Name of the person or company receiving the order.
+
+      - name: recipient_city
+        description: City where the order was delivered.
+
+      - name: recipient_region
+        description: Region where the order was delivered.
+
+      - name: recipient_country
+        description: Country where the order was delivered.

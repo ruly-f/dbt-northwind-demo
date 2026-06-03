@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: stg_erp__employees
+    description: Employee details enriched with manager relationships and consistent typing.
+    columns:
+      - name: employee_pk
+        description: Natural primary key provided by the ERP employees table.
+        data_tests:
+          - unique
+          - not_null
+      - name: manager_fk
+        description: Reference to the employee record of the manager.
+      - name: employee_name
+        description: Full name of the employee in "First Last" format.
+      - name: employee_title
+        description: Job title or role of the employee.
+      - name: employee_birth_date
+        description: Date of birth for the employee.
+      - name: employee_hire_date
+        description: Date the employee started with the company.
+      - name: employee_city
+        description: City where the employee is based.
+      - name: employee_region
+        description: Region or state where the employee is based.
+      - name: employee_country
+        description: Country where the employee is based.

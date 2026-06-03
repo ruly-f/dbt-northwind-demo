@@ -6,7 +6,7 @@ models:
     columns:
       - name: customer_pk
         description: Unique identifier for each customer.
-        tests:
+        data_tests:
           - unique
           - not_null
 
