@@ -2,9 +2,11 @@
 name: 'dbt_northwind'
 version: '1.0.0'
 config-version: 2
+dbt-cloud:
+  project-id: 548606
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'default'
+profile: 'dbt_northwind'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
