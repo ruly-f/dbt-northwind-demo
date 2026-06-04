@@ -1,0 +1,124 @@
+
+metrics:
+  # order-grain metrics (from fct_orders)
+  - name: total_sales
+    label: "total sales"
+    model: "{{ ref('fct_orders') }}"
+    description: "sum of order-level sales (order net total)."
+    calculation_method: sum
+    expression: net_total
+    timestamp: order_date
+    dimensions:
+      - order_date
+      - recipient_country
+      - recipient_region
+      - customer_fk
+      - employee_fk
+    meta:
+      source_model: fct_orders
+
+  - name: orders_count
+    label: "orders count"
+    model: "{{ ref('fct_orders') }}"
+    description: "count of distinct orders."
+    calculation_method: count
+    expression: order_pk
+    timestamp: order_date
+    dimensions:
+      - order_date
+      - recipient_country
+      - recipient_region
+      - customer_fk
+      - employee_fk
+    meta:
+      source_model: fct_orders
+
+  - name: gross_sales
+    label: "gross sales"
+    model: "{{ ref('fct_orders') }}"
+    description: "sum of order-level sales before discounts."
+    calculation_method: sum
+    expression: gross_total
+    timestamp: order_date
+    dimensions:
+      - order_date
+      - recipient_country
+      - recipient_region
+    meta:
+      source_model: fct_orders
+
+  - name: total_freight
+    label: "total freight"
+    model: "{{ ref('fct_orders') }}"
+    description: "sum of freight charges at the order level."
+    calculation_method: sum
+    expression: freight_total
+    timestamp: order_date
+    dimensions:
+      - order_date
+      - recipient_country
+      - recipient_region
+    meta:
+      source_model: fct_orders
+
+  # transaction-grain metrics (from fct_transactions)
+  - name: total_quantity
+    label: "total quantity"
+    model: "{{ ref('fct_transactions') }}"
+    description: "sum of product quantities sold (transaction grain)."
+    calculation_method: sum
+    expression: quantity
+    timestamp: order_date
+    dimensions:
+      - order_date
+      - product_fk
+      - recipient_country
+      - recipient_region
+    meta:
+      source_model: fct_transactions
+
+  - name: transactions_count
+    label: "transactions count"
+    model: "{{ ref('fct_transactions') }}"
+    description: "count of transaction (order line) rows."
+    calculation_method: count
+    expression: order_item_sk
+    timestamp: order_date
+    dimensions:
+      - order_date
+      - product_fk
+      - recipient_country
+    meta:
+      source_model: fct_transactions
+
+  - name: avg_price_per_unit
+    label: "average price per unit"
+    model: "{{ ref('fct_transactions') }}"
+    description: "average unit price (unweighted average of unit_price). for a revenue-weighted avg, use total_sales/total_quantity."
+    calculation_method: average
+    expression: unit_price
+    timestamp: order_date
+    dimensions:
+      - order_date
+      - product_fk
+      - recipient_country
+    meta:
+      source_model: fct_transactions
+
+  # derived metric (uses existing metrics)
+  - name: avg_order_value
+    label: "average order value"
+    model: "{{ ref('fct_orders') }}"
+    description: "average order value computed as total_sales / orders_count."
+    calculation_method: derived
+    expression: "coalesce(total_sales / nullif(orders_count,0), 0)"
+    timestamp: order_date
+    dimensions:
+      - order_date
+      - recipient_country
+      - recipient_region
+      - customer_fk
+    meta:
+      derived_from:
+        - total_sales
+        - orders_count
