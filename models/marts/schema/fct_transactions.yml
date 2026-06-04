@@ -1,36 +1,87 @@
 models:
   - name: fct_transactions
     description: Transaction-grain fact table (one row per order line item) with freight allocated evenly across the products.
+    semantic_model:
+      enabled: true
+    agg_time_dimension: order_date
+    metrics:
+      - name: total_quantity
+        label: Total Quantity
+        description: Sum of product quantities sold at the transaction grain.
+        type: simple
+        agg: sum
+        expr: quantity
+
+      - name: transactions_count
+        label: Transactions Count
+        description: Count of transaction rows at the order-line grain.
+        type: simple
+        agg: count
+        expr: 1
+
+      - name: avg_price_per_unit
+        label: Average Price Per Unit
+        description: Unweighted average of unit price across transaction rows.
+        type: simple
+        agg: average
+        expr: unit_price
     columns:
       - name: order_item_sk
         description: Primary key of the transaction fact table.
         data_tests:
           - unique
           - not_null
+        entity:
+          type: primary
+          name: order_item
 
       - name: order_fk
         description: Foreign key referencing the order header.
+        entity:
+          type: foreign
+          name: sales_order
 
       - name: product_fk
         description: Foreign key referencing the product.
+        entity:
+          type: foreign
+          name: product
 
       - name: employee_fk
         description: Foreign key referencing the employee responsible for the order.
+        entity:
+          type: foreign
+          name: employee
 
       - name: customer_fk
         description: Foreign key referencing the customer who placed the order.
+        entity:
+          type: foreign
+          name: customer
 
       - name: shipper_fk
         description: Foreign key referencing the shipper used for delivery.
+        entity:
+          type: foreign
+          name: shipper
 
       - name: order_date
         description: Date when the order was placed.
+        granularity: day
+        dimension:
+          type: time
 
       - name: ship_date
         description: Date when the order was shipped.
+        granularity: day
+        dimension:
+          type: time
 
       - name: required_delivery_date
         description: Date the customer requested the order to be delivered.
+        granularity: day
+        dimension:
+          type: time
 
       - name: discount_pct
         description: Discount percentage applied to the item.
@@ -52,18 +103,30 @@ models:
 
       - name: had_discount
         description: Indicates whether a discount was applied to the item.
+        dimension:
+          type: categorical
 
       - name: order_number
         description: Human-readable identifier of the order.
+        dimension:
+          type: categorical
 
       - name: recipient_name
         description: Name of the person or company receiving the order.
+        dimension:
+          type: categorical
 
       - name: recipient_city
         description: City where the order was delivered.
+        dimension:
+          type: categorical
 
       - name: recipient_region
         description: Region where the order was delivered.
+        dimension:
+          type: categorical
 
       - name: recipient_country
         description: Country where the order was delivered.
+        dimension:
+          type: categorical
