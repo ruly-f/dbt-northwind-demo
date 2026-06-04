@@ -1,12 +1,15 @@
 models:
   - name: dim_dates
     description: Day-level calendar spine covering 2001 through 2020 with common date attributes for reporting and joins.
+    time_spine:
+      standard_granularity_column: calendar_date
     columns:
       - name: calendar_date
         description: Calendar date at day grain.
         data_tests:
           - unique
           - not_null
+        granularity: day
 
       - name: calendar_year
         description: Four-digit calendar year of the date.
@@ -33,34 +36,34 @@ models:
         description: First date of the week containing the calendar date.
 
       - name: month_start_date
-        description: First date of the month containing the calendar date.
+        description: First date of the month containing the calendar_date.
 
       - name: quarter_start_date
-        description: First date of the quarter containing the calendar date.
+        description: First date of the quarter containing the calendar_date.
 
       - name: year_start_date
-        description: First date of the year containing the calendar date.
+        description: First date of the year containing the calendar_date.
 
       - name: month_end_date
-        description: Last date of the month containing the calendar date.
+        description: Last date of the month containing the calendar_date.
 
       - name: quarter_end_date
-        description: Last date of the quarter containing the calendar date.
+        description: Last date of the quarter containing the calendar_date.
 
       - name: year_end_date
-        description: Last date of the year containing the calendar date.
+        description: Last date of the year containing the calendar_date.
 
       - name: month_name_short
-        description: Abbreviated month name for the calendar date.
+        description: Abbreviated month name for the calendar_date.
 
       - name: month_name
-        description: Full month name for the calendar date.
+        description: Full month name for the calendar_date.
 
       - name: day_name_short
-        description: Abbreviated weekday name for the calendar date.
+        description: Abbreviated weekday name for the calendar_date.
 
       - name: day_name
-        description: Full weekday name for the calendar date.
+        description: Full weekday name for the calendar_date.
 
       - name: is_weekend
         description: Flag indicating whether the date falls on Saturday or Sunday.
