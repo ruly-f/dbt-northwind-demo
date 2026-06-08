@@ -3,6 +3,9 @@ models:
     description: >
       Dimension table that contains customer information including company name and location details.
       This table is used to support analyses related to customer behavior, regional sales, and order distribution.
+    config:
+      meta:
+        contains_pii: true
     columns:
       - name: customer_pk
         description: Unique identifier for each customer.

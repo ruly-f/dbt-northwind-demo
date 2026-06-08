@@ -5,8 +5,8 @@ models:
       enabled: true
     agg_time_dimension: order_date
     metrics:
-      - name: total_sales
-        label: Total Sales
+      - name: net_sales
+        label: Net Sales
         description: Sum of order-level sales after discounts.
         type: simple
         agg: sum
@@ -37,9 +37,9 @@ models:
         label: Average Order Value
         description: Average order value computed as total sales divided by orders count.
         type: derived
-        expr: coalesce(total_sales / nullif(orders, 0), 0)
+        expr: coalesce(net_sales / nullif(orders, 0), 0)
         input_metrics:
-          - name: total_sales
+          - name: net_sales
           - name: orders_count
             alias: orders
     columns:
