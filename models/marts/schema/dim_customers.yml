@@ -5,7 +5,39 @@ models:
       This table is used to support analyses related to customer behavior, regional sales, and order distribution.
     config:
       meta:
-        contains_pii: true
+        common_data_model:
+          business_questions:
+            - "How much revenue was recognized by period, product, and customer?"
+            - "Which customers, products, or segments are driving revenue changes?"
+            - "What revenue can be used as the trusted source for business reporting?"
+
+          table_grain: "One row per customer, product, and reporting period."
+
+          related_tables:
+            - table_name: dim_customer
+              join_keys:
+                - customer_id
+              join_guidance: "Left join recommended to preserve all revenue records, including unmapped customers."
+
+            - table_name: dim_product
+              join_keys:
+                - product_id
+              join_guidance: "Left join recommended to preserve revenue records when product mapping is incomplete."
+
+            - table_name: dim_date
+              join_keys:
+                - reporting_date
+              join_guidance: "Inner join can be used for period-based reporting and calendar attributes."
+
+          known_limitations:
+            - "This model is designed for revenue reporting and should not be used for cash collection analysis."
+            - "Data prior to YYYY-MM-DD is excluded due to legacy system migration rules."
+            - "Revenue adjustments may be restated when upstream source data is corrected."
+
+          ownership:
+            business_owner: "Finance Operations"
+            technical_owner: "Data Engineering"
+
     columns:
       - name: customer_pk
         description: Unique identifier for each customer.
