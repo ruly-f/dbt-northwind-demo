@@ -5,8 +5,8 @@ models:
       enabled: true
     agg_time_dimension: order_date
     metrics:
-      - name: total_sales
-        label: Total Sales
+      - name: net_sales
+        label: Net Sales
         description: Sum of order-level sales after discounts.
         type: simple
         agg: sum
