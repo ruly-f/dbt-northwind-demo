@@ -10,7 +10,7 @@ Operationalizes the audit_helper validation workflow. The skill takes the user f
 ## How this skill is laid out
 
 ```
-.claude/skills/dbt_data_audit/
+.claude/skills/dbt-data-audit/
 ├── SKILL.md           # this file — the runbook
 ├── scaffold/          # canonical install media — copied as-is into a new project's models/audit_helper/
 │   ├── README.md
@@ -49,13 +49,24 @@ Check the current working directory:
 If no, propose bootstrapping via `AskUserQuestion`. On confirmation:
 
 1. **Create** `models/audit_helper/` if missing
-2. **Copy** every file from `.claude/skills/dbt_data_audit/scaffold/` into `models/audit_helper/`, preserving filenames. Read each scaffold file and Write it to the destination — never edit during copy
+2. **Copy** every file from `.claude/skills/dbt-data-audit/scaffold/` into `models/audit_helper/`, preserving filenames. Read each scaffold file and Write it to the destination — never edit during copy
 3. **Add `audit_helper` to `packages.yml`**:
    - If `packages.yml` doesn't exist, create it with `dbt-labs/audit_helper` and (if obviously needed) `dbt-labs/dbt_utils`
    - If it exists and already lists `dbt-labs/audit_helper`, leave the existing version pin alone and tell the user (don't downgrade or upgrade silently)
    - If it exists without audit_helper, append the package with the latest version known at scaffold time (currently `0.14.0`)
-4. **Tell the user to run `dbt deps`** before generating any validation files
-5. Stop after bootstrap and confirm with the user — don't proceed straight into generating validation models in the same turn; let them inspect what landed
+4. **Add the `audit_helper` enabled gate to `dbt_project.yml`** under the project's models block:
+   ```yaml
+   models:
+     <project_name>:
+       audit_helper:
+         +enabled: "{{ target.name in ('dev', 'audit_helper') }}"
+   ```
+   If the `audit_helper` key already exists under models, add `+enabled` to it without touching other settings. If the user has a different target convention (e.g. `ci` or `staging`), ask before writing.
+
+   **Why this matters**: generated vld files carry no `config(enabled = ...)` block — they inherit this setting. This means all audit models are enabled in dev (where you work) and automatically disabled everywhere else. Example files keep `config(enabled = false)` hardcoded, which overrides the project setting so they're never run in any environment.
+
+5. **Tell the user to run `dbt deps`** before generating any validation files
+6. Stop after bootstrap and confirm with the user — don't proceed straight into generating validation models in the same turn; let them inspect what landed
 
 Idempotency: if a file in `scaffold/` already exists at the destination with different content, **do not overwrite** — show a diff and ask. The user may have intentionally evolved the project copy.
 
@@ -125,7 +136,7 @@ Then ask a follow-up question: any **business** columns to exclude, with a free-
 
 ### 5. Generate vld_1 and vld_2
 
-Read templates from `.claude/skills/dbt_data_audit/templates/`:
+Read templates from `.claude/skills/dbt-data-audit/templates/`:
 - `vld_1.sql.tmpl`
 - `vld_2.sql.tmpl`
 
@@ -139,19 +150,26 @@ Substitute placeholders:
 
 **Critical formatting rule**: every excluded column appears as a commented line in BOTH the `select` block (inside `old_query` and `new_query`) AND the `columns = [...]` macro parameter, each with `-- excluded: <reason>`. Future readers must be able to see what was skipped and why.
 
-Write the files to `models/audit_helper/<base_name>_vld_1.sql` and `<base_name>_vld_2.sql`. Keep `config(enabled = false)` — the user enables them after review.
+Write the files to `models/audit_helper/<base_name>_vld_1.sql` and `<base_name>_vld_2.sql`. **Do not add a `config(enabled = ...)` block** — the files inherit the project-level `+enabled` gate from `dbt_project.yml`. The `audit_helper` block there already controls when they run.
 
 Show the user the diff/preview of both files.
 
-### 6. Hand-off for vld_1/vld_2 execution
+### 6. Execute vld_1/vld_2 and fetch results
 
-Tell the user:
-1. Review the generated files (especially the legacy SELECT)
-2. Either set `enabled = true` or remove the config block
-3. Run `dbt run -s <base>_vld_1 <base>_vld_2`
-4. Paste the result tables back
+**Always run models yourself first** using the Bash tool — do not ask the user to run them or paste results:
 
-Wait for their results — do not proceed assuming success.
+```bash
+# Run the models
+dbt run -s <base>_vld_1 <base>_vld_2
+
+# Fetch results (no paste needed — use dbt show directly)
+dbt show -s <base>_vld_1 --limit 10
+dbt show -s <base>_vld_2 --limit 30
+```
+
+Set `enabled = true` in generated files **before** running so dbt-fusion doesn't skip them.
+
+After running, announce the results and interpret them in the next step. Only ask the user for input if a run fails or if you need domain knowledge to interpret an unexpected result.
 
 ### 7. Interpret vld_1 / vld_2 output
 
@@ -165,11 +183,18 @@ Apply the same thresholds as `workflow.md`:
 
 For vld_2, collect every column where `has_difference = true`. That's the input list for vld_3.
 
-### 8. Generate vld_3
+### 8. Generate vld_3 and run it
 
 Read `templates/vld_3.sql.tmpl`. Substitute the same placeholders, but `{{COLUMNS_LIST}}` is scoped to only the columns flagged by vld_2.
 
-Write to `models/audit_helper/<base_name>_vld_3.sql`, enabled = false. Show the user, ask them to enable and run, paste back the output.
+Write to `models/audit_helper/<base_name>_vld_3.sql` with `enabled = true`, then run immediately:
+
+```bash
+dbt run -s <base>_vld_3
+dbt show -s <base>_vld_3 --limit 50
+```
+
+Do not ask the user to enable or run it — do it yourself. Interpret the results directly from `dbt show` output.
 
 ### 9. Diagnose using patterns.md
 
@@ -179,29 +204,94 @@ For each problem column, look at vld_3's dominant category:
 - `values do not match` → real drift (whitespace, case, precision, timezone, units)
 - `missing from a/b` → row-level, not column-level — audit joins
 
-Walk through `models/audit_helper/patterns.md` and propose the most likely fix. **Always show the user the proposed SQL change as a diff before writing it.** Apply the fix inside the `old_query` block (legacy side) of the relevant vld file(s).
+Walk through `models/audit_helper/patterns.md` and propose the most likely fix. Apply the fix inside the `old_query` block (legacy side) of the relevant vld file(s).
 
 After applying a fix:
-1. Ask the user to re-run vld_3 (and vld_1)
+1. Re-run vld_3 yourself (`dbt run -s <base>_vld_3 && dbt show -s <base>_vld_3 --limit 50`)
 2. Confirm the column moved to ✅ category
 3. Propagate the same standardization to vld_1 and vld_2 so they reflect the corrected A representation
 
 Cycle: diagnose → fix → re-run. Don't bundle multiple fixes per cycle — one fix, one re-run, so credit is attributable.
 
+**When a fix attempt has no effect** (vld_3 count unchanged after re-run), escalate systematically before declaring the mismatch "acceptable":
+
+1. **Check for invisible characters** — inspect the seed file bytes for the affected column:
+   ```python
+   python3 -c "
+   import csv
+   with open('seeds/<seed>.csv', encoding='utf-8') as f:
+       for row in csv.DictReader(f):
+           val = row['COLUMN_NAME']
+           if '<search_term>' in val:
+               print(repr(val), '->', val.encode('utf-8').hex())
+               break
+   "
+   ```
+   Look for: non-breaking spaces (`c2a0`), carriage returns (`0d`), zero-width characters (`e2808b`), combining Unicode (e.g. `e` + `cc80` instead of `c3a8`).
+
+2. **Check the source model** — read the staging `.sql` that produces the column to see if the model itself applies a transformation (cast, trim, upper, replace) that the seed doesn't reflect.
+
+3. **Check for source data drift** — if seed bytes are clean, staging is a plain pass-through, and the fix had no effect, the source table may have changed since the seed was exported. This is a **known acceptable mismatch**, not a fixable transformation issue. Document it in vld_3's old_query with a `-- NOTE:` comment and in the vld_1 header.
+
+Only declare a mismatch "acceptable" after following all three escalation steps. Don't skip straight to "source drift" without checking bytes and the model first.
+
 ### 10. Generate vld_4 if vld_3 isn't enough
 
 When vld_3's `values do not match` stays high and patterns.md doesn't yield an obvious cause, generate vld_4 from `templates/vld_4.sql.tmpl`. **Scope `{{COLUMNS_LIST}}` to one column at a time** — mixing columns in samples makes diagnosis harder.
 
-Have the user run it and share the `modified` sample rows. Inspect the actual `<col>_a` / `<col>_b` pairs for subtle differences (trailing whitespace, hidden characters, timezone offsets visible in seconds).
+Run it yourself and inspect `modified` rows:
+
+```bash
+dbt run -s <base>_vld_4
+dbt show -s <base>_vld_4 --limit -1 2>&1 | grep "modified" | head -20
+```
+
+The `--limit -1` with `grep modified` surfaces the A vs B value pairs for mismatched rows without flooding the output. Inspect the actual (A_value, B_value) pairs for subtle differences (trailing whitespace, hidden characters, timezone offsets visible in seconds, scale multipliers like ×100, case differences).
+
+**Reuse vld_4 for each stubborn column** by editing the column name and PK selection in the file — no need to create separate vld_4 files per column.
 
 ### 11. Close out
 
 When match quality is acceptable:
 1. Open `models/audit_helper/audit_helper_monitoring.sql`
-2. Add a line inside the `-- depends on:` block: `-- depends on: {{ ref('<base_name>_vld_1') }}`
-3. Recommend disabling vld_2/3/4 (`enabled = false`) or deleting them entirely — only vld_1 stays on for ongoing monitoring
+2. Add a line: `-- depends on: {{ ref('<base_name>_vld_1') }}`
+3. Leave vld_2/3/4 in place — they have no config block and are gated by `dbt_project.yml`. They'll only run in dev, which is fine; they're cheap views and useful to have available when re-investigating later.
 4. Run `dbt run -s audit_helper_monitoring` to verify the snapshot picks up the new validation
-5. Optionally add a header comment to `<base_name>_vld_1.sql` documenting the closing match rate and any known acceptable mismatches
+5. Add a header comment to `<base_name>_vld_1.sql` documenting the closing match rate and all standardizations and known mismatches
+
+### 12. Closing report (mandatory)
+
+Always end the session with a structured report in the conversation — even if the user didn't ask for one. This is the audit's permanent record.
+
+**Format:**
+
+---
+**Audit summary: `<new_model>` vs `<legacy_source>`**
+**Closing match rate: XX% equal** (`<date>`)
+
+**Standardizations applied (legacy/A side):**
+
+| Column | Fix | Effect |
+|---|---|---|
+| `col` | description of transformation | `had_discount`: 0% → 99.86% match |
+
+**Known acceptable mismatches:**
+
+| Column | Rows | % | Category | Explanation |
+|---|---|---|---|---|
+| `col` | N | X% | source drift / precision / intentional | one-line explanation |
+
+**3 rows missing from A**: PKs present in B but not legacy — expected new records.
+
+**Next steps:**
+- Enable `audit_helper_monitoring.sql` for continuous tracking
+- [any remaining open questions or recommended follow-up]
+---
+
+**Depth rules for the report:**
+- For each "standardization applied" row, state both the SQL fix AND the before/after match rate change so the reader knows the impact of each fix individually
+- For each "acceptable mismatch", state whether it is: (a) **source drift** — data changed since seed export, (b) **precision improvement** — new model is more precise, (c) **intentional design difference** — new model behaves differently by design, or (d) **unresolved** — investigated but cause unknown (rare; flag clearly)
+- If any mismatch is "unresolved", add a recommendation: what additional investigation would be needed (e.g. re-export the seed, run a direct source query, check the ETL pipeline)
 
 ## Rules the skill must always follow
 
@@ -211,7 +301,7 @@ When match quality is acceptable:
 - **Preserve excluded columns as comments**: never delete an excluded column from the file — keep it commented with its reason
 - **One fix per iteration**: don't bundle multiple standardizations into a single Edit
 - **Don't modify the new (B) side** to match legacy quirks — transformations only go on the A side, so the validation truly measures whether B matches the audited expectation
-- **Backport improvements to `scaffold/`**: if during a session the user edits a doc or example file in `models/audit_helper/` in a way that is broadly useful (typo fix, new diagnosis pattern, clearer wording), offer to mirror the change back into `.claude/skills/dbt_data_audit/scaffold/` so the skill's install media stays current. Never auto-mirror — always confirm first, and skip the offer for project-specific edits
+- **Backport improvements to `scaffold/`**: if during a session the user edits a doc or example file in `models/audit_helper/` in a way that is broadly useful (typo fix, new diagnosis pattern, clearer wording), offer to mirror the change back into `.claude/skills/dbt-data-audit/scaffold/` so the skill's install media stays current. Never auto-mirror — always confirm first, and skip the offer for project-specific edits
 
 ## Edge cases
 

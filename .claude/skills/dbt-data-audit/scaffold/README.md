@@ -44,4 +44,4 @@ Every example ships with `config(enabled = false)` so they don't compile into yo
 
 - **First time running a validation?** → [`workflow.md`](workflow.md) — step-by-step iteration loop
 - **Match rate < 98% and you don't know why?** → [`patterns.md`](patterns.md) — common legacy-vs-new mismatch recipes
-- **Want the workflow automated?** → invoke the `dbt-data-audit` skill (`.claude/skills/dbt_data_audit/`) and let it generate the validation models from your inputs
+- **Want the workflow automated?** → invoke the `dbt-data-audit` skill (`.claude/skills/dbt-data-audit/`) and let it generate the validation models from your inputs

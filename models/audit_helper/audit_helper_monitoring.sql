@@ -3,7 +3,7 @@
         materialized = 'incremental'
         , unique_key = 'ah_monitoring_sk'
         , full_refresh = true if var('override_full_refresh', 'no') == 'yes' else false
-        , enabled = false
+        , enabled = true
     )
 }}
 /*
@@ -22,10 +22,8 @@
     {%- do reference_list.append(ref(validation_table)) -%}
 {%- endfor %}
 
--- Add here all _vld1 models that this model depends on. Example:
-/*
--- depends on: {{ ref('example_vld_1') }}
-*/
+-- Add here all _vld1 models that this model depends on:
+-- depends on: {{ ref('int_order_items__metrics_vld_1') }}
 
 with
     match_snapshot as (
