@@ -31,6 +31,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   dbt_northwind:
     +static_analysis: strict
+    audit_helper:
+      +static_analysis: off
+      +enabled: "{{ target.name in ('audit_helper', 'dev') }}"
 
     intermediate:
       +materialized: view

@@ -1,0 +1,12 @@
+models:
+  - name: audit_helper_monitoring
+    columns:
+      - name: ah_monitoring_sk
+        data_tests:
+          - unique
+          - not_null
+      - name: validation_table
+      - name: match_analysis_check_ts
+      - name: equal
+      - name: in_legacy__but_not_in_new
+      - name: in_new__but_not_in_legacy
